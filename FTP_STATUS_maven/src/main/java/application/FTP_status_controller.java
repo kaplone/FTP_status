@@ -49,6 +49,10 @@ public class FTP_status_controller implements Initializable {
 	String ftpLogin;
 	String ftpPass;
 	int ftpPort;
+	static int tailleMin;
+	static float seuilVert;
+	static float seuilJaune;
+	static float seuilRouge;
 	
 	Instant now;
 	ArrayList<OldFile> oldFiles;
@@ -111,6 +115,12 @@ public class FTP_status_controller implements Initializable {
 			s = br.readLine();
 			
 	    	while(s != null){
+
+	    		if (s.startsWith("#") || s.trim().equals("")){
+	    			s = br.readLine();
+	    			continue;
+	    		}
+	    		
 	    		String key = s.split("=")[0].trim();
 	    		String value = s.split("=")[1].trim();
 	    		switch (key){
@@ -123,6 +133,15 @@ public class FTP_status_controller implements Initializable {
 	    		                break;
 	    		case "pass" :  ftpPass = value;
 	    			            break;
+	    		case "taille_min" :  tailleMin = Integer.parseInt(value);
+	                            break;
+	    		case "seuil_vert" :  seuilVert = Integer.parseInt(value);
+                                break;
+	    		case "seuil_jaune" :  seuilJaune = Integer.parseInt(value);
+	                            break;
+	    		case "seuil_rouge" :  seuilRouge = Integer.parseInt(value);
+	                            break;
+
 	    		}
 	    		
 	    		
@@ -184,7 +203,7 @@ public class FTP_status_controller implements Initializable {
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		loadSettings();
 		FTPClient ftpClient_ = ftpConnect();
 		
@@ -203,5 +222,23 @@ public class FTP_status_controller implements Initializable {
 		affichage();
 		
 	}
+
+	public static int getTailleMin() {
+		return tailleMin;
+	}
+
+	public static float getSeuilJaune() {
+		return seuilJaune;
+	}
+
+	public static float getSeuilRouge() {
+		return seuilRouge;
+	}
+
+	public static float getSeuilVert() {
+		return seuilVert;
+	}
+	
+	
 
 }
