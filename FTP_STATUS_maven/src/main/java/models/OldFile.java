@@ -4,7 +4,6 @@ import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.scene.BoundsAccessor;
 
-import application.FTP_status_controller;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -61,6 +60,7 @@ public class OldFile {
 	public Pane getPane(){
 		
 		Pane p = new Pane();
+
 		Rectangle r = new Rectangle(25, 25, Color.GREEN);
 		r.setWidth(this.taille > 5 ? this.taille : 5);
 		r.setArcWidth(5);
@@ -73,25 +73,24 @@ public class OldFile {
 		l.setPadding(new Insets(5, 0, 0, 5));
 		//l.setEffect(ds);
 		
-		if (age > FTP_status_controller.getSeuilVert() && age < FTP_status_controller.getSeuilJaune()){
-			r.setFill(Color.color((age - FTP_status_controller.getSeuilVert()) / (FTP_status_controller.getSeuilJaune() - FTP_status_controller.getSeuilVert()),
+		if (age > Settings.getSeuilVert() && age < Settings.getSeuilJaune()){
+			r.setFill(Color.color((age - Settings.getSeuilVert()) / (Settings.getSeuilJaune() - Settings.getSeuilVert()),
 					              1,
 					              0));
 		}
-		else if (age >= FTP_status_controller.getSeuilJaune() && age < FTP_status_controller.getSeuilRouge()){
+		else if (age >= Settings.getSeuilJaune() && age < Settings.getSeuilRouge()){
 			r.setFill(Color.color(1,
-					              1 - ((age - FTP_status_controller.getSeuilJaune()) 
-					                   / ( FTP_status_controller.getSeuilRouge()- FTP_status_controller.getSeuilJaune())),
+					              1 - ((age - Settings.getSeuilJaune()) 
+					                   / ( Settings.getSeuilRouge()- Settings.getSeuilJaune())),
 					              0));
 		}
-		else if (age >= FTP_status_controller.getSeuilRouge()){
+		else if (age >= Settings.getSeuilRouge()){
 			r.setFill(Color.RED);
 		}
 		
 		p.getChildren().add(r);
 		p.getChildren().add(l);
-		
-		
+
 		return p;
 		
 	}

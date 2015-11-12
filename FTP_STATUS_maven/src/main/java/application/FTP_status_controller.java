@@ -11,10 +11,15 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -22,6 +27,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import models.OldFile;
+import models.Serveur;
+import models.Settings;
+import utils.LoadConfig;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -39,6 +47,13 @@ public class FTP_status_controller implements Initializable {
 	private Label label;
 	
 	@FXML
+	private ChoiceBox<Serveur> liste_choiceBox;
+	@FXML
+	private Button ajouter_button;
+	@FXML
+	private Button configurer_button;
+	
+	@FXML
 	private TableColumn<OldFile, Pane> fichier;
 	@FXML
 	private TableColumn<OldFile, String> taille;
@@ -53,6 +68,9 @@ public class FTP_status_controller implements Initializable {
 	static float seuilVert;
 	static float seuilJaune;
 	static float seuilRouge;
+	
+	static ObservableList<Serveur> serveurs;
+	static Serveur serveur;
 	
 	Instant now;
 	ArrayList<OldFile> oldFiles;
@@ -74,88 +92,25 @@ public class FTP_status_controller implements Initializable {
 	                continue;
 	            }
 	            for (int i = 0; i < level; i++) {
-	                System.out.print("\t");
 	            }
 	            if (aFile.isDirectory()) {
-	                System.out.println("[" + currentFileName + "]");
 	                listDirectory(ftpClient, dirToList, currentFileName, level + 1);
 	            } else {
 	            	
-	            	System.out.println(Duration.between(aFile.getTimestamp().toInstant(), now).toDays());
-	            	
-	            	if(Duration.between(aFile.getTimestamp().toInstant(), now).toDays() > 60){
+	            	if(Duration.between(aFile.getTimestamp().toInstant(), now).toDays() > Settings.getSeuilVert()
+	                   && aFile.getSize()/1024/1024 >= Settings.getTailleMin()){
 	            		oldFiles.add(
 	            				new OldFile(
 	            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
 	            						Paths.get(dirToList).resolve(currentFileName).toString(),
 	            						aFile.getSize()/1024/1024 ));
-	            		
-	            		System.out.println(currentFileName + "  " + aFile.getSize()/1024/1024 + "Mo  " + aFile.getTimestamp().toInstant());
 	            	}
 	                
 	            }
 	        }
 	    }
 	}
-	
-	public void loadSettings(){
-		
-		String home =  System.getProperty("user.home");
-		File settings_file = new File(home, "ftp_status.conf");
-		
-        FileReader fr = null;
-    	
-		try {
-			fr = new FileReader(settings_file);
 
-	    	BufferedReader br = new BufferedReader(fr);
-	    	
-	    	String s = null;
-
-			s = br.readLine();
-			
-	    	while(s != null){
-
-	    		if (s.startsWith("#") || s.trim().equals("")){
-	    			s = br.readLine();
-	    			continue;
-	    		}
-	    		
-	    		String key = s.split("=")[0].trim();
-	    		String value = s.split("=")[1].trim();
-	    		switch (key){
-	    		
-	    		case "adresse" : ftpAdress = value;
-	    		                break;
-	    		case "port" : ftpPort = Integer.parseInt(value);
-                                break;
-	    		case "login" : ftpLogin = value;
-	    		                break;
-	    		case "pass" :  ftpPass = value;
-	    			            break;
-	    		case "taille_min" :  tailleMin = Integer.parseInt(value);
-	                            break;
-	    		case "seuil_vert" :  seuilVert = Integer.parseInt(value);
-                                break;
-	    		case "seuil_jaune" :  seuilJaune = Integer.parseInt(value);
-	                            break;
-	    		case "seuil_rouge" :  seuilRouge = Integer.parseInt(value);
-	                            break;
-
-	    		}
-	    		
-	    		
-				s = br.readLine();
-	    	}
-			fr.close();
-			
-		} catch (IOException e) {
-			// TODO Bloc catch généré automatiquement
-			e.printStackTrace();
-		}
-		
-	}
-	
 	public FTPClient ftpConnect(){
 
         FTPClient ftpClient = new FTPClient();
@@ -201,16 +156,35 @@ public class FTP_status_controller implements Initializable {
 		
 		
 	}
+	
+	@FXML
+	public void onAjouterButton(){
+		Serveur_controller nouveau_serveur = new Serveur_controller();
+        nouveau_serveur.initialize();
+	}
 
-	public void initialize(URL location, ResourceBundle resources) {
-
-		loadSettings();
-		FTPClient ftpClient_ = ftpConnect();
+	@FXML
+	public void onConfigurer_button(){
+		Settings_controller settings = new Settings_controller();
+		settings.initialize();
 		
+		serveurs = LoadConfig.loadSettings();
+	}
+	
+	public void rafraichir(){
+
 		now = Instant.now();
 		oldFiles = new ArrayList<>();
 		oldFilesTableau = FXCollections.observableArrayList();
 		
+		serveur = liste_choiceBox.getSelectionModel().getSelectedItem();
+		
+		ftpAdress = serveur.getFtpAdresse();
+		ftpLogin = serveur.getFtpLogin();
+		ftpPass = serveur.getFtpPass();
+		ftpPort = serveur.getFtpPort();
+		
+		FTPClient ftpClient_ = ftpConnect();
 		
 		try {
 			listDirectory(ftpClient_, "/", "", 1);
@@ -219,7 +193,31 @@ public class FTP_status_controller implements Initializable {
 			e.printStackTrace();
 		}
 		
+		
+		
 		affichage();
+	}
+
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		serveurs = LoadConfig.loadSettings();
+		
+		
+		tailleMin = Settings.getTailleMin();
+		seuilVert = Settings.getSeuilVert();
+		seuilJaune = Settings.getSeuilJaune();
+		seuilRouge = Settings.getSeuilRouge();	
+		
+		liste_choiceBox.setItems(serveurs);
+		liste_choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Serveur>() {
+			
+			@Override
+			public void changed(ObservableValue<? extends Serveur> observable, Serveur oldValue, Serveur newValue) {
+				serveur = newValue;
+				rafraichir();
+				
+			}
+		});
 		
 	}
 
