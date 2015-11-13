@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import application.FTP_status_controller;
+
 public class WriteConfig {
 	
 	public static void writeConfig(String field, String value){
@@ -98,8 +100,7 @@ public class WriteConfig {
 		}catch (IOException e) {
 		// TODO Bloc catch généré automatiquement
 		e.printStackTrace();
-	    }
-		
+	    }		
 	}
 
 }

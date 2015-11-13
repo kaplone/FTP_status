@@ -69,8 +69,8 @@ public class FTP_status_controller implements Initializable {
 	static float seuilJaune;
 	static float seuilRouge;
 	
-	static ObservableList<Serveur> serveurs;
-	static Serveur serveur;
+	private ObservableList<Serveur> serveurs;
+	private Serveur serveur;
 	
 	Instant now;
 	ArrayList<OldFile> oldFiles;
@@ -179,23 +179,27 @@ public class FTP_status_controller implements Initializable {
 		
 		serveur = liste_choiceBox.getSelectionModel().getSelectedItem();
 		
-		ftpAdress = serveur.getFtpAdresse();
-		ftpLogin = serveur.getFtpLogin();
-		ftpPass = serveur.getFtpPass();
-		ftpPort = serveur.getFtpPort();
-		
-		FTPClient ftpClient_ = ftpConnect();
-		
-		try {
-			listDirectory(ftpClient_, "/", "", 1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (serveur != null){
+			
+			ftpAdress = serveur.getFtpAdresse();
+			ftpLogin = serveur.getFtpLogin();
+			ftpPass = serveur.getFtpPass();
+			ftpPort = serveur.getFtpPort();
+			
+			FTPClient ftpClient_ = ftpConnect();
+			
+			try {
+				listDirectory(ftpClient_, "/", "", 1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			affichage();
+			
 		}
 		
 		
-		
-		affichage();
 	}
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -207,6 +211,10 @@ public class FTP_status_controller implements Initializable {
 		seuilVert = Settings.getSeuilVert();
 		seuilJaune = Settings.getSeuilJaune();
 		seuilRouge = Settings.getSeuilRouge();	
+		
+		liste_choiceBox.setOnMousePressed(e -> {serveurs = LoadConfig.loadSettings();
+		                                        liste_choiceBox.setItems(serveurs);  
+		});
 		
 		liste_choiceBox.setItems(serveurs);
 		liste_choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Serveur>() {
@@ -235,8 +243,6 @@ public class FTP_status_controller implements Initializable {
 
 	public static float getSeuilVert() {
 		return seuilVert;
-	}
-	
-	
+	}  
 
 }
