@@ -200,16 +200,13 @@ public class FTP_status_controller implements Initializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			affichage();
-			
+			affichage();			
 		}
-		
-		
 	}
 
+
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		serveurs = LoadConfig.loadSettings();
 		
 		

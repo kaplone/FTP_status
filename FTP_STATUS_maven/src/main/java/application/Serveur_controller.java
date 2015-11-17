@@ -45,68 +45,27 @@ private Stage stage;
 		nomLabel = new Label("nom du serveur à afficher : ");
 		nom = new TextField();
 		
-//		nom.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setTailleMin(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("taille_min", newValue);
-//		        
-//		    }
-//		});
-		
 		hbox1 = new HBox();
 		hbox1.getChildren().add(nomLabel);
 		hbox1.getChildren().add(nom);
 		
 		adresseLabel = new Label("adresse du serveur : ");
 		adress = new TextField();
-		
-//		adress.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setSeuilVert(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("seuil_vert", newValue);
-//		        
-//		    }
-//		});
-		
+
 		hbox2 = new HBox();
 		hbox2.getChildren().add(adresseLabel);
 		hbox2.getChildren().add(adress);
 		
         loginLabel = new Label("login du compte : ");
         login = new TextField();
-        
-        
-//        login.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setSeuilJaune(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("seuil_jaune", newValue);
-//		        
-//		    }
-//		});
-		
+
         hbox3 = new HBox();
 		hbox3.getChildren().add(loginLabel);
 		hbox3.getChildren().add(login);
 		
         passLabel = new Label("mot de passe du compte : ");
         pass = new TextField();
-        
-//        pass.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setSeuilRouge(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("seuil_rouge", newValue);
-//		        
-//		    }
-//		});
-		
+
         hbox4 = new HBox();
 		hbox4.getChildren().add(passLabel);
 		hbox4.getChildren().add(pass);

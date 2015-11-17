@@ -16,6 +16,8 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
+import application.NewCompte_controller;
+import javafx.stage.Stage;
 import models.Settings;
 
 public class Caporal {
@@ -117,7 +119,7 @@ public class Caporal {
 		
 	}
 	
-	public static boolean createUser(String userName, String pass){
+	public static boolean createUser(String userName, String pass, Stage fenetre){
 		
 		done = false;
 		password = app.decryptedUserPassword;
@@ -186,6 +188,9 @@ public class Caporal {
 	    };
 	    
 	    runCreate.run();
+	    
+	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, pass);
+	    fenetre.close();
 	    
 	    return done;
 	}
