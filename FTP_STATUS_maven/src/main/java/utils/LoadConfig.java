@@ -79,6 +79,8 @@ public class LoadConfig {
 		                            break;
 		    		case "seuil_rouge" :  Settings.setSeuilRouge(Integer.parseInt(value));
 		                            break;
+		    		case "chef_de_projet" :  Settings.setChefDeProjet(value);
+                                    break;
 	
 		    		}
 	    		}
@@ -95,5 +97,48 @@ public class LoadConfig {
 		return serveurs;
 		
 	}
+    
+    public static void loadAdresse(){
 
+    	String home =  System.getProperty("user.home");
+		File settings_file = new File(home, "ftp_secret.conf");
+		
+        FileReader fr = null;
+        
+        System.out.println("fichier chargé");
+    	
+		try {
+			fr = new FileReader(settings_file);
+
+	    	BufferedReader br = new BufferedReader(fr);
+	    	
+	    	System.out.println("bufferisé");
+	    	
+	    	String s = br.readLine();
+			
+	    	while(s != null){
+	    		
+	    		System.out.println(s);
+	    		
+	    		if (s.startsWith("#") || s.trim().equals("")){
+	    		}
+	
+	    		else {
+	    		
+		    		String key = s.split("=")[0].trim();
+		    		String value = s.split("=")[1].trim();
+		    		
+		    		switch (key){
+		    		
+		                case "adresse_serveur" :  Settings.setAdresse_serveur(value);
+	                    break;
+		    		}
+	    		}
+	    		s = br.readLine();
+	    	}
+		} catch (IOException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		}    	
+    }
 }

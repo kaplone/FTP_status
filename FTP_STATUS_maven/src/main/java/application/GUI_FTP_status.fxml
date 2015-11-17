@@ -14,10 +14,13 @@
 </TableView>
 </center>
 <top><HBox prefHeight="39.0" prefWidth="1290.0" BorderPane.alignment="CENTER">
-<children><ChoiceBox fx:id="liste_choiceBox" prefHeight="25.0" prefWidth="404.0" /><Button fx:id="ajouter_button" mnemonicParsing="false" onAction="#onAjouterButton" prefHeight="25.0" prefWidth="194.0" text="Ajouter un serveur">
+<children><ChoiceBox fx:id="liste_choiceBox" prefHeight="25.0" prefWidth="404.0" /><Button fx:id="ajouter_button" mnemonicParsing="false" onAction="#onAjouterButton" prefHeight="25.0" prefWidth="242.0" text="Ajouter un serveur existant">
 <HBox.margin>
 <Insets left="10.0" />
-</HBox.margin></Button><HBox alignment="TOP_RIGHT" prefHeight="39.0" prefWidth="689.0">
+</HBox.margin></Button><Button fx:id="create_new_button" mnemonicParsing="false" onAction="#onCreate_new_button" prefHeight="25.0" prefWidth="297.0" text="Créer un nouveau compte FTP">
+<HBox.margin>
+<Insets left="10.0" />
+</HBox.margin></Button><HBox alignment="TOP_RIGHT" prefHeight="39.0" prefWidth="376.0">
 <HBox.margin>
 <Insets right="5.0" />
 </HBox.margin>

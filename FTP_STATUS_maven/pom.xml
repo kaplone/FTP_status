@@ -32,5 +32,20 @@
 	  <artifactId>commons-net</artifactId>
 	  <version>3.3</version>
     </dependency>
+    <dependency>
+	  <groupId>com.jcraft</groupId>
+	  <artifactId>jsch</artifactId>
+	  <version>0.1.53</version>
+    </dependency> 
+    <dependency>
+	  <groupId>org.jasypt</groupId>
+	  <artifactId>jasypt</artifactId>
+	  <version>1.9.2</version>
+    </dependency> 
+    <dependency>
+	  <groupId>commons-configuration</groupId>
+	  <artifactId>commons-configuration</artifactId>
+	  <version>1.6</version>
+    </dependency>   
   </dependencies>
 </project>

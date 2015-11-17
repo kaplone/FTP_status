@@ -2,10 +2,13 @@ package models;
 
 public class Settings {
 	
-	static int tailleMin;
-	static float seuilVert;
-	static float seuilJaune;
-	static float seuilRouge;
+	private static int tailleMin;
+	private static float seuilVert;
+	private static float seuilJaune;
+	private static float seuilRouge;
+	private static String chefDeProjet;
+	private static String adresse_serveur;
+	private static String pass_serveur;
 	
 	public static int getTailleMin() {
 		return tailleMin;
@@ -31,7 +34,22 @@ public class Settings {
 	public static void setSeuilRouge(float seuilRouge) {
 		Settings.seuilRouge = seuilRouge;
 	}
-	
-	
-
+	public static String getChefDeProjet() {
+		return chefDeProjet;
+	}
+	public static void setChefDeProjet(String chefDeProjet) {
+		Settings.chefDeProjet = chefDeProjet;
+	}
+	public static String getAdresse_serveur() {
+		return adresse_serveur;
+	}
+	public static void setAdresse_serveur(String adresse_serveur) {
+		Settings.adresse_serveur = adresse_serveur;
+	}
+	public static String getPass_serveur() {
+		return pass_serveur;
+	}
+	public static void setPass_serveur(String pass_serveur) {
+		Settings.pass_serveur = pass_serveur;
+	}
 }

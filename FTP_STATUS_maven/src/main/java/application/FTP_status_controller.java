@@ -171,6 +171,12 @@ public class FTP_status_controller implements Initializable {
 		serveurs = LoadConfig.loadSettings();
 	}
 	
+	@FXML
+	public void onCreate_new_button(){
+		NewCompte_controller new_server = new NewCompte_controller();
+		new_server.initialize();
+	}
+	
 	public void rafraichir(){
 
 		now = Instant.now();
