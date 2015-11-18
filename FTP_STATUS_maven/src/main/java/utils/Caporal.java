@@ -27,6 +27,8 @@ public class Caporal {
 	static private String password; 
 	static private boolean done;
 	
+	static private String uid_chefDeProjet;
+	
 	final private static String home =  System.getProperty("user.home");
 	final private static String secret_pwd = "ftp_secret.conf";
 	final private static File secret_file = new File(home, secret_pwd);
@@ -51,11 +53,7 @@ public class Caporal {
 				
 				JSch jsch=new JSch();  
 				
-				System.out.println("avant adresse lue");
-				
 				LoadConfig.loadAdresse();
-				
-				System.out.println("adresse lue");
 				
 				try {
 					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
@@ -75,40 +73,12 @@ public class Caporal {
 				    
 				    String command = "cat /etc/passwd";
 				    
-				    Channel channel=session.openChannel("exec");
-				    ((ChannelExec)channel).setCommand(command);
+                    uid_chefDeProjet = envoiCommande(session, command);
 				    
-				    channel.setInputStream(null);
-				    
-				    ((ChannelExec)channel).setErrStream(System.err);
-
-				    Reader in= new InputStreamReader(channel.getInputStream());
-
-				    channel.connect();
-				    
-				    
-				    BufferedReader br = new BufferedReader(in);
-			    	
-			    	String s = br.readLine();
-					
-			    	while(s != null){
-			    		
-			    		System.out.println(s.split(":")[0]);
-			    		
-			    		if (s.split(":")[0].equals(userName)){
-			    		    exists = true;	
-			    		    break;
-			    		}
-			    		s = br.readLine();
-
-			    	}
-				    
-				    channel.disconnect();
-				    session.disconnect();
-
 				} catch (JSchException | IOException e) {
-					// TODO Auto-generated catch block
+					done = false;
 					e.printStackTrace();
+
 				}
 			}
 		};
@@ -119,7 +89,7 @@ public class Caporal {
 		
 	}
 	
-	public static boolean createUser(String userName, String pass, Stage fenetre){
+	public static boolean createUser(String userName, String pass){
 		
 		done = false;
 		password = app.decryptedUserPassword;
@@ -128,6 +98,8 @@ public class Caporal {
 		
 			@Override
 			public void run() {
+				
+				String command = "";
 				
 				JSch jsch=new JSch();  
 				try {
@@ -143,47 +115,69 @@ public class Caporal {
 				    session.setConfig(config);
 				    
 				    session.connect();
-				    
-				    System.out.println(String.format("useradd -p %s -m %s -d /home/%s/%s -g %s -G users ",
-				    		                       pass, userName, Settings.getChefDeProjet(), userName, Settings.getChefDeProjet()));
-				    
-				    String command = String.format("useradd -p %s -m %s -d /home/%s/%s -g %s -G users",
-				    		                       pass, userName, Settings.getChefDeProjet(), userName, Settings.getChefDeProjet());
-				    
-				    Channel channel=session.openChannel("exec");
-				    ((ChannelExec)channel).setCommand(command);
-				    
-                    channel.setInputStream(null);
-				    
-				    ((ChannelExec)channel).setErrStream(System.err);
 
-				    Reader in= new InputStreamReader(channel.getInputStream());
+				    command = String.format("useradd -p %s -m %s -d /home/satmulti/sd/%s/www/%s -o -u %s -g users -k /etc/skel_ftp -s /bin/false",
+				    		                       pass, userName, Settings.getChefDeProjet(), userName, uid_chefDeProjet);
+				    
+				    envoiCommande(session, command);
 
-				    channel.connect();
-				    
-				    
-				    BufferedReader br = new BufferedReader(in);
-			    	
-			    	String s = br.readLine();
-					
-			    	while(s != null){
-			    		
-			    		System.out.println(s);
-			    		s = br.readLine();
-
-			    	}
-				    
-				    channel.disconnect();
-				    session.disconnect();
-				    
-				    done = true;
-				    
-				    System.out.println("le compte a été créé ...");
 				} catch (JSchException | IOException e) {
 					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
 					e.printStackTrace();
 
 				}
+				    
+				    
+			}
+	    };
+	    
+	    runCreate.run();
+
+	    return done;
+	}
+	
+	public static boolean setUserPasswd(String userName, String pass, Stage fenetre){
+		
+		done = false;
+		password = app.decryptedUserPassword;
+		
+	    Runnable runCreate = new Runnable() {
+		
+			@Override
+			public void run() {
+				
+				String command = "";
+				
+				JSch jsch=new JSch();  
+				try {
+					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					// username and password will be given via UserInfo interface.
+				    //UserInfo ui= new MyUserInfo();
+   
+				    session.setPassword(password);
+				    
+				  //extra config code
+				    java.util.Properties config = new java.util.Properties(); 
+				    config.put("StrictHostKeyChecking", "no");
+				    session.setConfig(config);
+				    
+				    session.connect();
+
+                    command = String.format("echo '%s:%s' | chpasswd",
+                            userName, pass);
+
+                    envoiCommande(session, command);
+    
+				    
+				} catch (JSchException | IOException e) {
+					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+					e.printStackTrace();
+
+				}
+				    
+				    
 			}
 	    };
 	    
@@ -193,6 +187,51 @@ public class Caporal {
 	    fenetre.close();
 	    
 	    return done;
+	}
+	
+	public static String envoiCommande(Session session, String command) throws JSchException, IOException{
+		
+		System.out.println("\n[TODO] : '" + command + "'\n");
+		
+		Channel channel=session.openChannel("exec");
+	    ((ChannelExec)channel).setCommand(command);
+	    
+        channel.setInputStream(null);
+	    
+	    ((ChannelExec)channel).setErrStream(System.err);
+
+	    Reader in= new InputStreamReader(channel.getInputStream());
+
+	    channel.connect();
+	    
+	    
+	    BufferedReader br = new BufferedReader(in);
+    	
+    	String s = br.readLine();
+		
+    	while(s != null){
+    		
+    		System.out.println(s);
+    		
+    		if(command.equals("cat /etc/passwd") && s.startsWith(String.format("%s:", Settings.getChefDeProjet() ))){
+    			uid_chefDeProjet = s.split(":")[2];
+    			System.out.println("[UID] : " + uid_chefDeProjet);
+    		}
+    		
+    		s = br.readLine();
+
+    	}
+	    
+	    channel.disconnect();
+	    session.disconnect();
+	    
+	    done = true;
+	    
+	    System.out.println("\n[OK] commande : '" + command + "' effectuée\n");
+	    
+	    return uid_chefDeProjet;
+	
+		
 	}
 
 

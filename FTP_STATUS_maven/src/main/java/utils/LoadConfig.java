@@ -50,8 +50,6 @@ public class LoadConfig {
 	    		else if (s.startsWith("[")){
 
 	    			nom = s.substring(1, s.trim().length() -1);
-	    			
-	    			System.out.println("nom : " + nom);
 	    			serveur = new Serveur(nom);
 
 	    		}
@@ -104,21 +102,15 @@ public class LoadConfig {
 		File settings_file = new File(home, "ftp_secret.conf");
 		
         FileReader fr = null;
-        
-        System.out.println("fichier chargé");
     	
 		try {
 			fr = new FileReader(settings_file);
 
 	    	BufferedReader br = new BufferedReader(fr);
 	    	
-	    	System.out.println("bufferisé");
-	    	
 	    	String s = br.readLine();
 			
 	    	while(s != null){
-	    		
-	    		System.out.println(s);
 	    		
 	    		if (s.startsWith("#") || s.trim().equals("")){
 	    		}
