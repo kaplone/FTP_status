@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
@@ -95,15 +97,38 @@ public class FTP_status_controller implements Initializable {
 	            }
 	            if (aFile.isDirectory()) {
 	                listDirectory(ftpClient, dirToList, currentFileName, level + 1);
+	                System.out.println("\n[INFO] : " + aFile.getName());
+	                System.out.println("[REPERTOIRE] : " + aFile);
 	            } else {
+	            	
+	            	System.out.print("\nliste complete : ");
+	            	System.out.println(aFile.getName() + " : " + Duration.between(aFile.getTimestamp().toInstant(), now).toDays() + " jours, " + aFile.getSize()/1024/1024 + " Mo");
 	            	
 	            	if(Duration.between(aFile.getTimestamp().toInstant(), now).toDays() > Settings.getSeuilVert()
 	                   && aFile.getSize()/1024/1024 >= Settings.getTailleMin()){
-	            		oldFiles.add(
-	            				new OldFile(
-	            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
-	            						Paths.get(dirToList).resolve(currentFileName).toString(),
-	            						aFile.getSize()/1024/1024 ));
+	            		
+	            		System.out.print("liste filtrée : ");
+	            		System.out.println(aFile.getName() + " : " + Duration.between(aFile.getTimestamp().toInstant(), now).toDays() + " jours, " + aFile.getSize()/1024/1024 + " Mo");
+	            		
+	            		
+	            		System.out.println(dirToList);
+	            		System.out.println(currentFileName);
+	            		System.out.println(Paths.get(dirToList).resolve(currentFileName));
+	            		
+//	            		try {
+	            		
+		            		oldFiles.add(
+		            				new OldFile(
+		            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
+		            						Paths.get(dirToList).resolve(currentFileName).toString(),
+		            						aFile.getSize()/1024/1024 ));
+		            		        
+		            		System.out.println("[OK] : " + aFile);
+//	            		}
+//	            		catch (InvalidPathException ipe){
+//	            			System.out.println("[ERREUR] : " + aFile.getName());
+//	            			System.out.println("[ERREUR] : " + aFile);
+//	            		}
 	            	}
 	                
 	            }
@@ -114,8 +139,16 @@ public class FTP_status_controller implements Initializable {
 	public FTPClient ftpConnect(){
 
         FTPClient ftpClient = new FTPClient();
+        ftpClient.setAutodetectUTF8(true);
+        //ftpClient.setControlEncoding("UTF-8");
+        ftpClient.setCharset(Charset.forName("UTF-8"));
+        
         try {
             ftpClient.connect(ftpAdress, ftpPort);
+            
+            System.out.println("Charset_name : " + ftpClient.getCharsetName());
+            System.out.println("Control_encoding : " + ftpClient.getControlEncoding());
+            
             int replyCode = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 System.out.println("Operation failed. Server reply code: " + replyCode);
@@ -129,6 +162,9 @@ public class FTP_status_controller implements Initializable {
                 System.out.println("LOGGED IN SERVER");
                 return ftpClient;
             }
+            
+            
+            
         } catch (IOException ex) {
             System.out.println("Oops! Something wrong happened");
             ex.printStackTrace();
