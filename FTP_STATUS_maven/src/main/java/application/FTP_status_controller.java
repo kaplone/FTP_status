@@ -61,6 +61,8 @@ public class FTP_status_controller implements Initializable {
 	private TableColumn<OldFile, String> taille;
 	@FXML
 	private TableColumn<OldFile, String> age;
+	@FXML
+	private TableColumn<OldFile, Pane> delete;
 	
 	String ftpAdress;
 	String ftpLogin;
@@ -123,7 +125,8 @@ public class FTP_status_controller implements Initializable {
 		            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
 		            						//Paths.get(dirToList).resolve(currentFileName).toString(),
 		            						dirToList + File.separator + currentFileName,
-		            						aFile.getSize()/1024/1024 ));
+		            						aFile.getSize()/1024/1024,
+		            						false ));
 		            		        
 		            		System.out.println("[OK] : " + aFile);
 //	            		}
@@ -187,12 +190,25 @@ public class FTP_status_controller implements Initializable {
 		age.setCellValueFactory(
 		        new PropertyValueFactory<OldFile,String>("age")
 		    );
+		delete.setCellValueFactory(
+		        new PropertyValueFactory<OldFile,Pane>("delete")
+		    );
 
 		oldFilesTableau.addAll(oldFiles);
 		
 		tableau.setItems(oldFilesTableau);
 		
 		
+	}
+	
+	@FXML
+	public void onSupprimerButton(){
+		for (OldFile of : oldFiles){
+			if (of.getD()){
+				System.out.println(of.getChemin());
+				
+			}
+		}
 	}
 	
 	@FXML
@@ -214,6 +230,7 @@ public class FTP_status_controller implements Initializable {
 		NewCompte_controller new_server = new NewCompte_controller();
 		new_server.initialize();
 	}
+
 	
 	public void rafraichir(){
 

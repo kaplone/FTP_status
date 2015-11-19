@@ -8,8 +8,8 @@
 <BorderPane prefHeight="600.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FTP_status_controller">
 <center><TableView fx:id="tableau" prefHeight="540.0" prefWidth="920.0" BorderPane.alignment="CENTER">
   <columns>
-    <TableColumn fx:id="fichier" prefWidth="1065.0" text="Fichier" />
-    <TableColumn fx:id="taille" minWidth="0.0" prefWidth="114.0" text="Taille" /><TableColumn fx:id="age" prefWidth="110.0" text="Age" />
+    <TableColumn fx:id="fichier" prefWidth="952.0" text="Fichier" />
+    <TableColumn fx:id="taille" minWidth="0.0" prefWidth="96.0" text="Taille" /><TableColumn fx:id="age" prefWidth="88.0" text="Age" /><TableColumn fx:id="delete" prefWidth="153.0" resizable="false" text="Supprimer" />
   </columns>
 </TableView>
 </center>
@@ -33,4 +33,11 @@
 <BorderPane.margin>
 <Insets bottom="5.0" left="5.0" top="5.0" />
 </BorderPane.margin></HBox>
-</top></BorderPane>
+</top>
+<bottom><HBox alignment="CENTER_RIGHT" prefHeight="31.0" prefWidth="1290.0" BorderPane.alignment="CENTER">
+<children><Button fx:id="supprimer_button" mnemonicParsing="false" onAction="#onSupprimerButton" text="Supprimer" />
+</children>
+<BorderPane.margin>
+<Insets right="20.0" />
+</BorderPane.margin></HBox>
+</bottom></BorderPane>

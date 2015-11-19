@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
 
 import javax.swing.JOptionPane;
 
@@ -186,6 +187,55 @@ public class Caporal {
 	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, pass);
 	    fenetre.close();
 	    
+	    return done;
+	}
+	
+public static boolean moveFile(String file, String destination){
+	
+	    
+		
+		done = false;
+		password = app.decryptedUserPassword;
+		
+	    Runnable runCreate = new Runnable() {
+		
+			@Override
+			public void run() {
+				
+				String command = "";
+				
+				JSch jsch=new JSch();  
+				try {
+					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					// username and password will be given via UserInfo interface.
+				    //UserInfo ui= new MyUserInfo();
+   
+				    session.setPassword(password);
+				    
+				  //extra config code
+				    java.util.Properties config = new java.util.Properties(); 
+				    config.put("StrictHostKeyChecking", "no");
+				    session.setConfig(config);
+				    
+				    session.connect();
+
+				    command = String.format("mv %s %s", file, destination);
+				    
+				    envoiCommande(session, command);
+
+				} catch (JSchException | IOException e) {
+					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+					e.printStackTrace();
+
+				}
+				    
+				    
+			}
+	    };
+	    
+	    runCreate.run();
+
 	    return done;
 	}
 	

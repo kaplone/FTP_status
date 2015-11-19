@@ -4,8 +4,11 @@ import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;
 import com.sun.javafx.scene.BoundsAccessor;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -19,13 +22,15 @@ public class OldFile {
 	private long age;
 	private String chemin;
 	private long taille;
+	private boolean d;
+	private Pane delete;
 	
-	
-	
-	public OldFile(long age, String chemin, long taille) {
+	public OldFile(long age, String chemin, long taille, boolean delete) {
 		this.age = age;
 		this.chemin = chemin;
 		this.taille = taille;
+		this.d = delete;
+		this.delete = newDelete();
 	}
 	public String getAge() {
 		return String.format("%03d jours", age);
@@ -96,6 +101,36 @@ public class OldFile {
 		p.getChildren().add(r);
 		p.getChildren().add(l);
 
+		return p;
+		
+	}
+	
+	public Pane getDelete(){
+		return delete;
+	}
+	
+	public boolean getD(){
+		return d;
+	}
+	
+	public Pane newDelete(){
+		
+		Pane p = new Pane();
+		
+		CheckBox cb = new CheckBox();
+		cb.setSelected(false);
+		
+//		cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+//	         public void changed(ObservableValue<? extends Boolean> ov,
+//	             Boolean old_val, Boolean new_val) {
+//	             System.out.println(cb.isSelected());
+//	          }
+//	    });
+		
+		cb.setOnAction(a -> this.d = cb.isSelected());
+		
+		p.getChildren().add(cb);
+		
 		return p;
 		
 	}
