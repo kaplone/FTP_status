@@ -113,14 +113,16 @@ public class FTP_status_controller implements Initializable {
 	            		
 	            		System.out.println(dirToList);
 	            		System.out.println(currentFileName);
-	            		System.out.println(Paths.get(dirToList).resolve(currentFileName));
+	            		//System.out.println(Paths.get(dirToList).resolve(currentFileName));
+	            		System.out.println(dirToList + File.separator + currentFileName);
 	            		
 //	            		try {
 	            		
 		            		oldFiles.add(
 		            				new OldFile(
 		            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
-		            						Paths.get(dirToList).resolve(currentFileName).toString(),
+		            						//Paths.get(dirToList).resolve(currentFileName).toString(),
+		            						dirToList + File.separator + currentFileName,
 		            						aFile.getSize()/1024/1024 ));
 		            		        
 		            		System.out.println("[OK] : " + aFile);

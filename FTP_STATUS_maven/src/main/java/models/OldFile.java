@@ -61,10 +61,15 @@ public class OldFile {
 		
 		Pane p = new Pane();
 
-		Rectangle r = new Rectangle(25, 25, Color.GREEN);
+		Rectangle r = new Rectangle(25, 5, Color.rgb(255, 255, 255, 1));
 		r.setWidth(this.taille > 5 ? this.taille : 5);
 		r.setArcWidth(5);
 		r.setArcHeight(5);
+		
+		
+		r.setStroke(Color.BLACK);
+		r.setStrokeWidth(3);
+		r.setLayoutY(25);
 		
 		DropShadow ds = new DropShadow();
 		ds.setColor(Color.color(1f, 1f, 1f));
@@ -74,18 +79,18 @@ public class OldFile {
 		//l.setEffect(ds);
 		
 		if (age > Settings.getSeuilVert() && age < Settings.getSeuilJaune()){
-			r.setFill(Color.color((age - Settings.getSeuilVert()) / (Settings.getSeuilJaune() - Settings.getSeuilVert()),
+			r.setStroke(Color.color((age - Settings.getSeuilVert()) / (Settings.getSeuilJaune() - Settings.getSeuilVert()),
 					              1,
 					              0));
 		}
 		else if (age >= Settings.getSeuilJaune() && age < Settings.getSeuilRouge()){
-			r.setFill(Color.color(1,
+			r.setStroke(Color.color(1,
 					              1 - ((age - Settings.getSeuilJaune()) 
 					                   / ( Settings.getSeuilRouge()- Settings.getSeuilJaune())),
 					              0));
 		}
 		else if (age >= Settings.getSeuilRouge()){
-			r.setFill(Color.RED);
+			r.setStroke(Color.RED);
 		}
 		
 		p.getChildren().add(r);
