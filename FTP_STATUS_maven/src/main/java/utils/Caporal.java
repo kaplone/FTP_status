@@ -34,18 +34,34 @@ public class Caporal {
 	final private static String secret_pwd = "ftp_secret.conf";
 	final private static File secret_file = new File(home, secret_pwd);
 	
-	public static boolean checkUserExists(String userName){
+	
+	private static String sortie = "";
+	
+	public static boolean connect(){
+		
+		done = false;
 		
 		try {
 			app = new EncryptDecrypt(secret_file.getPath(),"pass_serveur","encrypted");
+			done = true;
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			return done;
 		}
 		
 		password = app.decryptedUserPassword;
 		
 		System.out.println("mot de passe décrypté");
+		return done;
+	}
+	
+	
+	public static boolean checkUserExists(String userName){
+		
+		connect();
+		
+		done = false;
 
 		Runnable readUsers = new Runnable() {
 			
@@ -58,8 +74,6 @@ public class Caporal {
 				
 				try {
 					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
-					// username and password will be given via UserInfo interface.
-				    //UserInfo ui= new MyUserInfo();
 	
 				    session.setPassword(password);
 				    
@@ -75,6 +89,9 @@ public class Caporal {
 				    String command = "cat /etc/passwd";
 				    
                     uid_chefDeProjet = envoiCommande(session, command);
+                    
+                    done = true;
+                    exists = true;
 				    
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -105,8 +122,6 @@ public class Caporal {
 				JSch jsch=new JSch();  
 				try {
 					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
-					// username and password will be given via UserInfo interface.
-				    //UserInfo ui= new MyUserInfo();
    
 				    session.setPassword(password);
 				    
@@ -141,7 +156,6 @@ public class Caporal {
 	public static boolean setUserPasswd(String userName, String pass, Stage fenetre){
 		
 		done = false;
-		password = app.decryptedUserPassword;
 		
 	    Runnable runCreate = new Runnable() {
 		
@@ -153,8 +167,6 @@ public class Caporal {
 				JSch jsch=new JSch();  
 				try {
 					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
-					// username and password will be given via UserInfo interface.
-				    //UserInfo ui= new MyUserInfo();
    
 				    session.setPassword(password);
 				    
@@ -190,12 +202,11 @@ public class Caporal {
 	    return done;
 	}
 	
-public static boolean moveFile(String file, String destination){
-	
-	    
-		
+    public static boolean moveFile(String file, String destination, String chef_de_projet, String pass){
+
+
 		done = false;
-		password = app.decryptedUserPassword;
+		password = pass;
 		
 	    Runnable runCreate = new Runnable() {
 		
@@ -206,9 +217,7 @@ public static boolean moveFile(String file, String destination){
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
-					// username and password will be given via UserInfo interface.
-				    //UserInfo ui= new MyUserInfo();
+					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -238,6 +247,59 @@ public static boolean moveFile(String file, String destination){
 
 	    return done;
 	}
+    
+    public static String listDir(String username, String chef_de_projet, String pass){
+
+	    String file = Settings.getRacine_serveur() + "/" + username;
+	    
+	    System.out.println(file);
+		
+		done = false;
+		password = pass;
+		
+	    Runnable runCreate = new Runnable() {
+		
+			@Override
+			public void run() {
+				
+				String command = "";
+				
+				JSch jsch=new JSch();  
+				try {
+					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+   
+				    session.setPassword(password);
+				    
+				  //extra config code
+				    java.util.Properties config = new java.util.Properties(); 
+				    config.put("StrictHostKeyChecking", "no");
+				    session.setConfig(config);
+				    
+				    session.connect();
+
+				    command = String.format("python /ftpscript/FTP_alert/main_cli.py  '%s' %d %d", file, Math.round(Settings.getSeuilVert()), Math.round(Settings.getTailleMin()));
+				    
+				    envoiCommande(session, command);
+				    
+				    done = true;
+
+				} catch (JSchException | IOException e) {
+					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+					e.printStackTrace();
+
+				}
+				    
+				    
+			}
+	    };
+	    
+	    runCreate.run();
+	    
+	    System.out.println(sortie);
+
+	    return sortie;
+	}
 	
 	public static String envoiCommande(Session session, String command) throws JSchException, IOException{
 		
@@ -261,11 +323,10 @@ public static boolean moveFile(String file, String destination){
 		
     	while(s != null){
     		
-    		System.out.println(s);
+    		sortie += (s + "\n");
     		
     		if(command.equals("cat /etc/passwd") && s.startsWith(String.format("%s:", Settings.getChefDeProjet() ))){
     			uid_chefDeProjet = s.split(":")[2];
-    			System.out.println("[UID] : " + uid_chefDeProjet);
     		}
     		
     		s = br.readLine();
@@ -278,9 +339,9 @@ public static boolean moveFile(String file, String destination){
 	    done = true;
 	    
 	    System.out.println("\n[OK] commande : '" + command + "' effectuée\n");
-	    
+
 	    return uid_chefDeProjet;
-	
+
 		
 	}
 

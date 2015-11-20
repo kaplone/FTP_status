@@ -79,6 +79,8 @@ public class LoadConfig {
 		                            break;
 		    		case "chef_de_projet" :  Settings.setChefDeProjet(value);
                                     break;
+		    		case "pass_chef_de_projet" :  Settings.setPassChefDeProjet(value);
+                                    break;
 	
 		    		}
 	    		}
@@ -123,6 +125,8 @@ public class LoadConfig {
 		    		switch (key){
 		    		
 		                case "adresse_serveur" :  Settings.setAdresse_serveur(value);
+	                    break;
+		                case "racine_serveur" :  Settings.setRacine_serveur(value);
 	                    break;
 		    		}
 	    		}

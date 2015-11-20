@@ -19,13 +19,14 @@ import javafx.scene.shape.Rectangle;
 
 public class OldFile {
 	
-	private long age;
+	private int age;
 	private String chemin;
-	private long taille;
+	private String chemin_complet;
+	private int taille;
 	private boolean d;
 	private Pane delete;
 	
-	public OldFile(long age, String chemin, long taille, boolean delete) {
+	public OldFile(int age, String chemin, int taille, boolean delete) {
 		this.age = age;
 		this.chemin = chemin;
 		this.taille = taille;
@@ -35,11 +36,11 @@ public class OldFile {
 	public String getAge() {
 		return String.format("%03d jours", age);
 	}
-	public long getAge_(){
+	public int getAge_(){
 		return this.age;
 	}
 	
-	public void setAge(long age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 	public String getChemin() {
@@ -54,7 +55,7 @@ public class OldFile {
 				             taille >= 1000 ? "Go" : "Mo");
 	}
 	
-	public long getTaille_() {
+	public int getTaille_() {
 		return taille;
 	}
 	
