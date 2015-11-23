@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import application.FTP_status_controller;
+import javafx.stage.Stage;
 
 public class WriteConfig {
 	
@@ -52,7 +53,7 @@ public class WriteConfig {
 		
 	}
 	
-    public static void addServeur(String nom, String adresse, String login, String pass){
+    public static void addServeur(String nom, String adresse, String login, String pass, Stage stage){
 		
 		String home =  System.getProperty("user.home");
 		File settings_file = new File(home, "ftp_status.conf");
@@ -96,6 +97,8 @@ public class WriteConfig {
 	    	fr.close();
 	    	fw.flush();
 	    	fw.close();
+	    	
+	    	stage.close();
 	    	
 		}catch (IOException e) {
 		// TODO Bloc catch généré automatiquement

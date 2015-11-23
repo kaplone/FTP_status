@@ -74,7 +74,7 @@ public class OldFile {
 		
 		
 		r.setStroke(Color.BLACK);
-		r.setStrokeWidth(3);
+		r.setStrokeWidth(1.5);
 		r.setLayoutY(25);
 		
 		DropShadow ds = new DropShadow();

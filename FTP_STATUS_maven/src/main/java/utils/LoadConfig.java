@@ -81,6 +81,8 @@ public class LoadConfig {
                                     break;
 		    		case "pass_chef_de_projet" :  Settings.setPassChefDeProjet(value);
                                     break;
+		    		case "sursis_effacement" : Settings.setSursis(Integer.parseInt(value));
+		    		                break;
 	
 		    		}
 	    		}

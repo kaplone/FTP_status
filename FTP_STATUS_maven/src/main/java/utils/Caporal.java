@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -91,7 +93,8 @@ public class Caporal {
                     uid_chefDeProjet = envoiCommande(session, command);
                     
                     done = true;
-                    exists = true;
+                    exists = false;  // le check ne se fait pas encore
+                                     // TODO : parser STDout et chercher userName ...
 				    
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -196,9 +199,55 @@ public class Caporal {
 	    
 	    runCreate.run();
 	    
-	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, pass);
+	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, pass, null);
 	    fenetre.close();
 	    
+	    return done;
+	}
+	
+	public static boolean CreateDir(String dir, String chef_de_projet, String pass){
+
+
+		done = false;
+		password = pass;
+		
+	    Runnable runCreate = new Runnable() {
+		
+			@Override
+			public void run() {
+				
+				String command = "";
+				
+				JSch jsch=new JSch();  
+				try {
+					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+   
+				    session.setPassword(password);
+				    
+				  //extra config code
+				    java.util.Properties config = new java.util.Properties(); 
+				    config.put("StrictHostKeyChecking", "no");
+				    session.setConfig(config);
+				    
+				    session.connect();
+
+				    command = String.format("mkdir %s", dir);
+				    
+				    envoiCommande(session, command);
+
+				} catch (JSchException | IOException e) {
+					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+					e.printStackTrace();
+
+				}
+				    
+				    
+			}
+	    };
+	    
+	    runCreate.run();
+
 	    return done;
 	}
 	
@@ -228,7 +277,7 @@ public class Caporal {
 				    
 				    session.connect();
 
-				    command = String.format("mv %s %s", file, destination);
+				    command = String.format("mv '%s' %s", file, destination);
 				    
 				    envoiCommande(session, command);
 
@@ -249,8 +298,20 @@ public class Caporal {
 	}
     
     public static String listDir(String username, String chef_de_projet, String pass){
+    	
+    	String file;
+    	
+    	ArrayList<String> anciens = new ArrayList<>();
+    	anciens.addAll(Arrays.asList(new String [] {"casto", "agglo", "wind", "fire"}));
+    	
+    	if (username.equals(chef_de_projet) || anciens.contains(username)){
+    		file = Settings.getRacine_serveur() + "/" + username;
+    	}
+    	else{
+    		file = Settings.getRacine_serveur() + "/" + chef_de_projet + "/www/" + username;
+    	}
 
-	    String file = Settings.getRacine_serveur() + "/" + username;
+	    
 	    
 	    System.out.println(file);
 		
@@ -302,6 +363,8 @@ public class Caporal {
 	}
 	
 	public static String envoiCommande(Session session, String command) throws JSchException, IOException{
+		
+		sortie = "";
 		
 		System.out.println("\n[TODO] : '" + command + "'\n");
 		

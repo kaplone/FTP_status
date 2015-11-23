@@ -4,6 +4,8 @@ public class Settings {
 	
 	private static int tailleMin;
 	
+	private static int sursis;
+	
 	private static float seuilVert;
 	private static float seuilJaune;
 	private static float seuilRouge;
@@ -69,5 +71,12 @@ public class Settings {
 	public static void setPassChefDeProjet(String passChefDeProjet) {
 		Settings.passChefDeProjet = passChefDeProjet;
 	}
+	public static int getSursis() {
+		return sursis;
+	}
+	public static void setSursis(int sursis) {
+		Settings.sursis = sursis;
+	}
+	
 	
 }

@@ -39,42 +39,20 @@ private Stage stage;
 		
 		loginLabel = new Label("login du compte à créer : ");
         login = new TextField();
-        
-        
-//        login.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setSeuilJaune(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("seuil_jaune", newValue);
-//		        
-//		    }
-//		});
-		
+
         hbox1 = new HBox();
 		hbox1.getChildren().add(loginLabel);
 		hbox1.getChildren().add(login);
 		
         passLabel = new Label("mot de passe du compte à créer : ");
         pass = new TextField();
-        
-//        pass.textProperty().addListener(new ChangeListener<String>() {
-//		    @Override
-//		    public void changed(ObservableValue<? extends String> observable,
-//		            String oldValue, String newValue) {
-//                Settings.setSeuilRouge(Integer.parseInt(newValue));
-//		        WriteConfig.writeConfig("seuil_rouge", newValue);
-//		        
-//		    }
-//		});
 		
         hbox2 = new HBox();
 		hbox2.getChildren().add(passLabel);
 		hbox2.getChildren().add(pass);
 		
 		enregistrer = new Button("Créer le nouveau compte");
-		
-		//enregistrer.setOnAction(e -> WriteConfig.addServeur(login.getText(), pass.getText()));
+
 		enregistrer.setOnAction(e -> { System.out.println("avant condition");
 			                           if(! Caporal.checkUserExists(login.getText())){
 			                               System.out.println("appel script de création");

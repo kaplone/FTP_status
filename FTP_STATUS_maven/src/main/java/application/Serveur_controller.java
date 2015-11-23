@@ -72,7 +72,7 @@ private Stage stage;
 		
 		enregistrer = new Button("Enregistrer le nouveau serveur");
 		
-		enregistrer.setOnAction(e -> WriteConfig.addServeur(nom.getText(), adress.getText(), login.getText(), pass.getText()));
+		enregistrer.setOnAction(e -> WriteConfig.addServeur(nom.getText(), adress.getText(), login.getText(), pass.getText(), stage));
 		
 		HBox.setHgrow(nom, Priority.ALWAYS);
         HBox.setHgrow(adress, Priority.ALWAYS);

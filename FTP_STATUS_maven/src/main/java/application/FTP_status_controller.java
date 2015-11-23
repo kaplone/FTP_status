@@ -9,6 +9,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -205,9 +207,17 @@ public class FTP_status_controller implements Initializable {
 	
 	@FXML
 	public void onSupprimerButton(){
+		
+		Instant dansUneSemaine = Instant.now().plus(Duration.ofDays(Settings.getSursis()));
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		
+		File rep_temp = new File(String.format("/home/ftp_trash/%s", format1.format(Date.from(dansUneSemaine))));
+		Caporal.CreateDir(rep_temp.toString(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
+
 		for (OldFile of : oldFiles){
 			if (of.getD()){
 				System.out.println(of.getChemin());
+				Caporal.moveFile(of.getChemin(), rep_temp.toString(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
 				
 			}
 		}
