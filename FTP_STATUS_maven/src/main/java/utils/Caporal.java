@@ -151,6 +151,56 @@ public class Caporal {
 			}
 	    };
 	    
+	    
+	    
+	    runCreate.run();
+
+	    return done;
+	}
+	
+public static boolean addReadme(String userName, String pass){
+		
+		done = false;
+		password = app.decryptedUserPassword;
+		
+	    Runnable runCreate = new Runnable() {
+		
+			@Override
+			public void run() {
+				
+				String command = "";
+				
+				JSch jsch=new JSch();  
+				try {
+					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+   
+				    session.setPassword(password);
+				    
+				  //extra config code
+				    java.util.Properties config = new java.util.Properties(); 
+				    config.put("StrictHostKeyChecking", "no");
+				    session.setConfig(config);
+				    
+				    session.connect();
+
+				    command = String.format("printf 'adresse : ftp://%s.satellite-multimedia.com\\nlogin : %s\\npass : %s' > /home/satmulti/sd/%s/www/%s/README.txt",
+				    		                Settings.getChefDeProjet(), userName , pass, Settings.getChefDeProjet(), userName );
+				    
+				    envoiCommande(session, command);
+
+				} catch (JSchException | IOException e) {
+					done = false;
+					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+					e.printStackTrace();
+
+				}
+				    
+				    
+			}
+	    };
+	    
+	    
+	    
 	    runCreate.run();
 
 	    return done;
@@ -199,8 +249,7 @@ public class Caporal {
 	    
 	    runCreate.run();
 	    
-	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, pass, null);
-	    fenetre.close();
+	    WriteConfig.addServeur(userName, Settings.getAdresse_serveur(), userName, fenetre);
 	    
 	    return done;
 	}

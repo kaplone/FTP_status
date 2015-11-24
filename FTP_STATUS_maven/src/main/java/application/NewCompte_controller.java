@@ -57,7 +57,9 @@ private Stage stage;
 			                           if(! Caporal.checkUserExists(login.getText())){
 			                               System.out.println("appel script de création");
 			                               Caporal.createUser(login.getText(), pass.getText());
+			                               Caporal.addReadme(login.getText(), pass.getText());
 			                               Caporal.setUserPasswd(login.getText(), pass.getText(), stage);
+			                               
 		                                }
 		                              });
 		

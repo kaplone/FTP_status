@@ -53,7 +53,7 @@ public class WriteConfig {
 		
 	}
 	
-    public static void addServeur(String nom, String adresse, String login, String pass, Stage stage){
+    public static void addServeur(String nom, String adresse, String login, Stage stage){
 		
 		String home =  System.getProperty("user.home");
 		File settings_file = new File(home, "ftp_status.conf");
@@ -89,8 +89,6 @@ public class WriteConfig {
 	    	fw.write(System.getProperty("line.separator"));
 	    	fw.write(String.format("%s = %s","login", login));
 	    	fw.write(System.getProperty("line.separator"));
-	    	fw.write(String.format("%s = %s","pass", pass));
-	    	fw.write(System.getProperty("line.separator"));
 	    	fw.write(String.format("[/%s]",nom));
 	    	fw.write(System.getProperty("line.separator"));
 	    	
@@ -99,6 +97,8 @@ public class WriteConfig {
 	    	fw.close();
 	    	
 	    	stage.close();
+		    
+		    System.out.println("closed");
 	    	
 		}catch (IOException e) {
 		// TODO Bloc catch généré automatiquement
