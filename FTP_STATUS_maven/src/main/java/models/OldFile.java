@@ -73,7 +73,7 @@ public class OldFile {
 		r.setArcHeight(5);
 		
 		
-		r.setStroke(Color.BLACK);
+		r.setStroke(Color.color(0,1,0));
 		r.setStrokeWidth(1.5);
 		r.setLayoutY(25);
 		

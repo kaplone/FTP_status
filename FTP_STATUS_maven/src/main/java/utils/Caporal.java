@@ -302,7 +302,7 @@ public class Caporal {
     	String file;
     	
     	ArrayList<String> anciens = new ArrayList<>();
-    	anciens.addAll(Arrays.asList(new String [] {"casto", "agglo", "wind", "fire"}));
+    	anciens.addAll(Arrays.asList(new String [] {"casto", "agglo", "earth", "fast", "fire", "go", "ready", "speed", "water", "wind"}));
     	
     	if (username.equals(chef_de_projet) || anciens.contains(username)){
     		file = Settings.getRacine_serveur() + "/" + username;
