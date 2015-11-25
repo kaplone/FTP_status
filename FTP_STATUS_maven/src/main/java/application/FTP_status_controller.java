@@ -256,95 +256,53 @@ public class FTP_status_controller implements Initializable {
 		if (serveur != null){
 			
 			ArrayList<String> anciens = new ArrayList<>();
+
+			String sortie = Caporal.listDir(serveur.getFtpLogin(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
 			
-			if (serveur.getFtpLogin().contains(",")){
-	    		for (String a : serveur.getFtpLogin().split(",")){
-	    			
-	    			String sortie = Caporal.listDir(a.trim(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
-					
-					BufferedReader br = new BufferedReader(new StringReader(sortie));
-			    	
-			    	String s;
-					try {
-						s = br.readLine();
-		
-				    	while(s != null){
-				    		System.out.println(s);
-							
-							System.out.println("split : " + Integer.parseInt(s.split("-___-")[2]));
-							System.out.println("split : " + s.split("-___-")[0]);
-							System.out.println("split : " + s.split("-___-")[1]);
-							
-							oldFiles.add(
-			        				new OldFile(
-			        						Integer.parseInt(s.split("-___-")[2]),
-			        						s.split("-___-")[0],
-			        						Integer.parseInt(s.split("-___-")[1]),
-			        						false ));
-							
-							s = br.readLine();
-							System.out.println(s);
-						}
-					} catch (IOException e) {
-						System.out.println("erreur dans le readline");
-						e.printStackTrace();
-					}
-	    			
-	    		}
-	    	}
+			BufferedReader br = new BufferedReader(new StringReader(sortie));
 	    	
-	    	else {
-			
-				String sortie = Caporal.listDir(serveur.getFtpLogin(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
-				
-				BufferedReader br = new BufferedReader(new StringReader(sortie));
-		    	
-		    	String s;
-				try {
-					s = br.readLine();
-	
-			    	while(s != null){
-			    		System.out.println(s);
-						
-						System.out.println("split : " + Integer.parseInt(s.split("-___-")[2]));
-						System.out.println("split : " + s.split("-___-")[0]);
-						System.out.println("split : " + s.split("-___-")[1]);
-						
-						oldFiles.add(
-		        				new OldFile(
-		        						Integer.parseInt(s.split("-___-")[2]),
-		        						s.split("-___-")[0],
-		        						Integer.parseInt(s.split("-___-")[1]),
-		        						false ));
-						
-						s = br.readLine();
-						System.out.println(s);
-					}
-				} catch (IOException e) {
-					System.out.println("erreur dans le readline");
-					e.printStackTrace();
-				}
-			    
-				System.out.println("fin de readline");
-				
-	//			ftpAdress = serveur.getFtpAdresse();
-	//			ftpLogin = serveur.getFtpLogin();
-	//			ftpPass = serveur.getFtpPass();
-	//			ftpPort = serveur.getFtpPort();
-	//			
-	//			FTPClient ftpClient_ = ftpConnect();
-	//			
-	//			try {
-	//				listDirectory(ftpClient_, "/", "", 1);
-	//			} catch (IOException e) {
-	//				// TODO Auto-generated catch block
-	//				e.printStackTrace();
-	//			}
-				
-				
-				
+	    	String s;
+			try {
+				s = br.readLine();
+
+		    	while(s != null){
+		    		System.out.println(s);
 					
-	    	}
+					System.out.println("split : " + Integer.parseInt(s.split("-___-")[2]));
+					System.out.println("split : " + s.split("-___-")[0]);
+					System.out.println("split : " + s.split("-___-")[1]);
+					
+					oldFiles.add(
+	        				new OldFile(
+	        						Integer.parseInt(s.split("-___-")[2]),
+	        						s.split("-___-")[0],
+	        						Integer.parseInt(s.split("-___-")[1]),
+	        						false ));
+					
+					s = br.readLine();
+					System.out.println(s);
+				}
+			} catch (IOException e) {
+				System.out.println("erreur dans le readline");
+				e.printStackTrace();
+			}
+		    
+			System.out.println("fin de readline");
+			
+//			ftpAdress = serveur.getFtpAdresse();
+//			ftpLogin = serveur.getFtpLogin();
+//			ftpPass = serveur.getFtpPass();
+//			ftpPort = serveur.getFtpPort();
+//			
+//			FTPClient ftpClient_ = ftpConnect();
+//			
+//			try {
+//				listDirectory(ftpClient_, "/", "", 1);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 			affichage();
 		}
 	}

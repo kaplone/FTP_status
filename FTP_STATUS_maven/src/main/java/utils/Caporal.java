@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
@@ -346,7 +347,7 @@ public static boolean addReadme(String userName, String pass){
 	    return done;
 	}
     
-    public static String listDir(String username, String chef_de_projet, String pass){
+    public static String traduction_chemin(String username, String chef_de_projet){
     	
     	String file;
     	
@@ -359,10 +360,17 @@ public static boolean addReadme(String userName, String pass){
     	else{
     		file = Settings.getRacine_serveur() + "/" + chef_de_projet + "/www/" + username;
     	}
-
-	    
-	    
-	    System.out.println(file);
+    	
+    	return file;
+    }
+    
+    public static String listDir(String username, String chef_de_projet, String pass){
+        
+    	String file;
+    	
+    	file = Arrays.asList(username.split(",")).stream().map(a -> traduction_chemin(a.trim(), chef_de_projet)).collect(Collectors.joining(","));
+        
+    	System.out.println(file);
 		
 		done = false;
 		password = pass;
