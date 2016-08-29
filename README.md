@@ -11,8 +11,11 @@
 
 - l'interface permet à l'utilisteur de créer à la volée, dans son espace, des comptes invités et autonomes
 
+####Classement des fichiers par âge
 ![fenêtre principale](ftp_caporal.png)
 
+####Classement des fichiers par taille
 ![fenêtre principale](ftp_caporal_2.png)
 
+####Création d'un nouveau compte invité
 ![fenêtre principale](ftp_caporal_3.png)
