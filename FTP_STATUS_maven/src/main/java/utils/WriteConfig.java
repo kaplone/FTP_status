@@ -1,4 +1,4 @@
-package utils;
+package main.java.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import application.FTP_status_controller;
+import main.java.application.FTP_status_controller;
 import javafx.stage.Stage;
 
 public class WriteConfig {

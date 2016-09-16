@@ -1,4 +1,4 @@
-package models;
+package main.java.models;
 
 import com.sun.javafx.geom.BaseBounds;
 import com.sun.javafx.geom.transform.BaseTransform;

@@ -1,4 +1,4 @@
-package utils;
+package main.java.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import models.Serveur;
-import models.Settings;
+import main.java.models.Serveur;
+import main.java.models.Settings;
 
 public class LoadConfig {
 	

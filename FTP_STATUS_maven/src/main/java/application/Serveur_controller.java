@@ -1,4 +1,4 @@
-package application;
+package main.java.application;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,8 +12,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import models.Settings;
-import utils.WriteConfig;
+import main.java.models.Settings;
+import main.java.utils.WriteConfig;
 
 public class Serveur_controller {
 	

@@ -1,4 +1,4 @@
-package application;
+package main.java.application;
 
 import javax.swing.GroupLayout.Alignment;
 
@@ -13,8 +13,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import models.Settings;
-import utils.WriteConfig;
+import main.java.models.Settings;
+import main.java.utils.WriteConfig;
 
 public class Settings_controller{
 	

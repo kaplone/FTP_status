@@ -1,4 +1,4 @@
-package utils;
+package main.java.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,9 +20,9 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
-import application.NewCompte_controller;
+import main.java.application.NewCompte_controller;
 import javafx.stage.Stage;
-import models.Settings;
+import main.java.models.Settings;
 
 public class Caporal {
 	
@@ -136,7 +136,7 @@ public class Caporal {
 				    
 				    session.connect();
 
-				    command = String.format("useradd -p %s -m %s -d /home/satmulti/sd/%s/www/%s -o -u %s -g users -k /etc/skel_ftp -s /bin/false",
+				    command = String.format("useradd -p %s -m %s -d /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com -o -u %s -g psacln -k /etc/skel_ftp -s /bin/false",
 				    		                       pass, userName, Settings.getChefDeProjet(), userName, uid_chefDeProjet);
 				    
 				    envoiCommande(session, command);
@@ -184,7 +184,7 @@ public static boolean addReadme(String userName, String pass){
 				    
 				    session.connect();
 
-				    command = String.format("printf 'adresse : ftp://%s.satellite-multimedia.com\\nlogin : %s\\npass : %s' > /home/satmulti/sd/%s/www/%s/README.txt",
+				    command = String.format("printf 'adresse : ftp://%s.satellite-multimedia.com\\nlogin : %s\\npass : %s' > /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com/README.txt",
 				    		                Settings.getChefDeProjet(), userName , pass, Settings.getChefDeProjet(), userName );
 				    
 				    envoiCommande(session, command);
@@ -355,10 +355,10 @@ public static boolean addReadme(String userName, String pass){
     	anciens.addAll(Arrays.asList(new String [] {"casto", "agglo", "earth", "fast", "fire", "go", "ready", "speed", "water", "wind"}));
     	
     	if (username.equals(chef_de_projet) || anciens.contains(username)){
-    		file = Settings.getRacine_serveur() + "/" + username;
+    		file = Settings.getRacine_serveur() + "/" + username + ".satellite-multimedia.com";
     	}
     	else{
-    		file = Settings.getRacine_serveur() + "/" + chef_de_projet + "/www/" + username;
+    		file = Settings.getRacine_serveur() + "/" + chef_de_projet + ".satellite-multimedia.com/" + username + ".satellite-multimedia.com";
     	}
     	
     	return file;

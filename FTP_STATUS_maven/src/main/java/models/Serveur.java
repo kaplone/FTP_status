@@ -1,4 +1,4 @@
-package models;
+package main.java.models;
 
 public class Serveur {
 	
@@ -12,7 +12,7 @@ public class Serveur {
 		this(null, null, null, null, 21);
 	}
 	public Serveur(String nom){
-		this(nom, null, null, null, 21);
+		this(nom, null, null, null,21);
 	}
 	
 	public Serveur(String nom, String adresse, String login, String pass, int port) {

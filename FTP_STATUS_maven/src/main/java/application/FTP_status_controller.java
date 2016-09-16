@@ -1,4 +1,4 @@
-package application;
+package main.java.application;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,11 +32,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import models.OldFile;
-import models.Serveur;
-import models.Settings;
-import utils.Caporal;
-import utils.LoadConfig;
+import main.java.models.OldFile;
+import main.java.models.Serveur;
+import main.java.models.Settings;
+import main.java.utils.Caporal;
+import main.java.utils.LoadConfig;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -72,6 +72,7 @@ public class FTP_status_controller implements Initializable {
 	String ftpAdress;
 	String ftpLogin;
 	String ftpPass;
+	String ftpRepertoire;
 	int ftpPort;
 	static int tailleMin;
 	static float seuilVert;

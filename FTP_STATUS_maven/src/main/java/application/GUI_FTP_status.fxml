@@ -4,8 +4,9 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import main.java.application.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FTP_status_controller">
+<BorderPane prefHeight="600.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.application.FTP_status_controller">
 <center><TableView fx:id="tableau" prefHeight="540.0" prefWidth="920.0" BorderPane.alignment="CENTER">
   <columns>
     <TableColumn fx:id="fichier" prefWidth="952.0" text="Fichier" />

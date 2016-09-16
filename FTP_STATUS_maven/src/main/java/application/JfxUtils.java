@@ -1,10 +1,10 @@
-package application;
+package main.java.application;
 
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import application.Main;
+import main.java.application.Main;
 
 public class JfxUtils {
 	
