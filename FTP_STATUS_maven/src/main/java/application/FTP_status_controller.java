@@ -211,18 +211,22 @@ public class FTP_status_controller implements Initializable {
 	public void onSupprimerButton(){
 		
 		Instant dansUneSemaine = Instant.now().plus(Duration.ofDays(Settings.getSursis()));
-		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-		
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy_MM_dd");
+
 		File rep_temp = new File(String.format("/home/ftp_trash/%s", format1.format(Date.from(dansUneSemaine))));
-		Caporal.CreateDir(rep_temp.toString(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
+		
+		System.out.println("création : " + rep_temp.toString());
+		Caporal.CreateDir(rep_temp.toString());
 
 		for (OldFile of : oldFiles){
 			if (of.getD()){
 				System.out.println(of.getChemin());
-				Caporal.moveFile(of.getChemin(), rep_temp.toString(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
+				Caporal.moveFile(of.getChemin(), rep_temp.toString());
 				
 			}
 		}
+		
+		rafraichir();
 	}
 	
 	@FXML

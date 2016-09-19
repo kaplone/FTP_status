@@ -263,22 +263,29 @@ public class Caporal {
 	    return done;
 	}
 	
-	public static boolean CreateDir(String dir, String chef_de_projet, String pass){
+	public static boolean CreateDir(String dir){
 
+		System.out.println("entered createdir()");
+		
+		Caporal.connect();
+		
+		System.out.println("Caporal.connect()");
 
 		done = false;
-		password = pass;
+		//password = app.decryptedUserPassword;
 		
 	    Runnable runCreate = new Runnable() {
 		
 			@Override
 			public void run() {
 				
+				System.out.println("entered run()");
+				
 				String command = "";
 				
 				JSch jsch=new JSch();  
 				try {
-					session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -288,6 +295,8 @@ public class Caporal {
 				    session.setConfig(config);
 				    
 				    session.connect();
+				    
+				    System.out.println("session.connect() connected");
 
 				    command = String.format("mkdir %s", dir);
 				    
@@ -309,11 +318,11 @@ public class Caporal {
 	    return done;
 	}
 	
-    public static boolean moveFile(String file, String destination, String chef_de_projet, String pass){
+    public static boolean moveFile(String file, String destination){
 
 
 		done = false;
-		password = pass;
+		//password = app.decryptedUserPassword;
 		
 	    Runnable runCreate = new Runnable() {
 		
@@ -324,7 +333,7 @@ public class Caporal {
 				
 				JSch jsch=new JSch();  
 				try {
-					session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
