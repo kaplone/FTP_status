@@ -10,8 +10,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.JOptionPane;
+
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -39,6 +42,8 @@ public class Caporal {
 	
 	
 	private static String sortie = "";
+	private static String command = "";
+	private static Session session;
 	
 	public static boolean connect(){
 		
@@ -76,7 +81,7 @@ public class Caporal {
 				LoadConfig.loadAdresse();
 				
 				try {
-					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
 	
 				    session.setPassword(password);
 				    
@@ -91,7 +96,7 @@ public class Caporal {
 				    
 				    String command = "cat /etc/passwd";
 				    
-                    uid_chefDeProjet = envoiCommande(session, command);
+                    uid_chefDeProjet = envoiCommande(command);
                     
                     done = true;
                     exists = false;  // le check ne se fait pas encore
@@ -125,7 +130,7 @@ public class Caporal {
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -139,7 +144,7 @@ public class Caporal {
 				    command = String.format("useradd -p %s -m %s -d /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com -o -u %s -g psacln -k /etc/skel_ftp -s /bin/false",
 				    		                       pass, userName, Settings.getChefDeProjet(), userName, uid_chefDeProjet);
 				    
-				    envoiCommande(session, command);
+				    envoiCommande(command);
 
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -159,7 +164,7 @@ public class Caporal {
 	    return done;
 	}
 	
-public static boolean addReadme(String userName, String pass){
+	public static boolean addReadme(String userName, String pass){
 		
 		done = false;
 		password = app.decryptedUserPassword;
@@ -173,7 +178,7 @@ public static boolean addReadme(String userName, String pass){
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -184,10 +189,13 @@ public static boolean addReadme(String userName, String pass){
 				    
 				    session.connect();
 
-				    command = String.format("printf 'adresse : ftp://%s.satellite-multimedia.com\\nlogin : %s\\npass : %s' > /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com/README.txt",
-				    		                Settings.getChefDeProjet(), userName , pass, Settings.getChefDeProjet(), userName );
+//				    command = String.format("printf 'adresse : ftp://%s.satellite-multimedia.com\\nlogin : %s\\npass : %s' > /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com/README.txt",
+//				    		                Settings.getChefDeProjet(), userName , pass, Settings.getChefDeProjet(), userName );
 				    
-				    envoiCommande(session, command);
+				    command = String.format("printf 'adresse : ftp://%s\\r\\nlogin : %s\\r\\npass : %s' > /var/www/vhosts/satellite-multimedia.com/%s.satellite-multimedia.com/%s.satellite-multimedia.com/README.txt",
+    		                Settings.getAdresse_serveur(), userName , pass, Settings.getChefDeProjet(), userName );
+				    
+				    envoiCommande(command);
 
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -220,7 +228,7 @@ public static boolean addReadme(String userName, String pass){
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession("root", Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -234,7 +242,7 @@ public static boolean addReadme(String userName, String pass){
                     command = String.format("echo '%s:%s' | chpasswd",
                             userName, pass);
 
-                    envoiCommande(session, command);
+                    envoiCommande(command);
     
 				    
 				} catch (JSchException | IOException e) {
@@ -270,7 +278,7 @@ public static boolean addReadme(String userName, String pass){
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -283,7 +291,7 @@ public static boolean addReadme(String userName, String pass){
 
 				    command = String.format("mkdir %s", dir);
 				    
-				    envoiCommande(session, command);
+				    envoiCommande(command);
 
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -316,7 +324,7 @@ public static boolean addReadme(String userName, String pass){
 				
 				JSch jsch=new JSch();  
 				try {
-					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
+					session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
    
 				    session.setPassword(password);
 				    
@@ -329,7 +337,7 @@ public static boolean addReadme(String userName, String pass){
 
 				    command = String.format("mv '%s' %s", file, destination);
 				    
-				    envoiCommande(session, command);
+				    envoiCommande(command);
 
 				} catch (JSchException | IOException e) {
 					done = false;
@@ -356,22 +364,50 @@ public static boolean addReadme(String userName, String pass){
     	
     	if (username.equals(chef_de_projet) || anciens.contains(username)){
     		file = Settings.getRacine_serveur() + "/" + username + ".satellite-multimedia.com";
+    		System.out.println("cas 1 : " + file);
     	}
     	else{
     		file = Settings.getRacine_serveur() + "/" + chef_de_projet + ".satellite-multimedia.com/" + username + ".satellite-multimedia.com";
+    		System.out.println("cas 2 : " + file);
     	}
     	
     	return file;
     }
     
-    public static String listDir(String username, String chef_de_projet, String pass){
-        
-    	String file;
+    static void nouvelle_commande(String file, String chef) {
     	
-    	file = Arrays.asList(username.split(",")).stream().map(a -> traduction_chemin(a.trim(), chef_de_projet)).collect(Collectors.joining(","));
-        
-    	System.out.println(file);
+    	System.out.println("nouvelle commande pour : " + file);
+    	
+    	command = String.format("python /ftpscript/FTP_alert/main_cli.py  '%s' %d %d", file, Math.round(Settings.getSeuilVert()), Math.round(Settings.getTailleMin()));
+	    System.out.println(command);
+	    
 		
+		JSch jsch=new JSch(); 
+	    try {
+	    	session = jsch.getSession(chef, Settings.getAdresse_serveur(), 22);
+	    	   
+		    session.setPassword(password);
+		    
+		  //extra config code
+		    java.util.Properties config = new java.util.Properties(); 
+		    config.put("StrictHostKeyChecking", "no");
+		    session.setConfig(config);
+		    
+		    session.connect();
+			envoiCommande(command);
+		} catch (JSchException | IOException e) {
+			System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
+			e.printStackTrace();
+			done = false;
+		}
+    }
+    
+    public static String listDir(String username, String chef_de_projet, String pass){
+    	
+    	System.out.println("exécution listdir() pour " + username);
+    	
+    	final Stream<String> files = Arrays.asList(username.split(",")).stream().map(a -> traduction_chemin(a.trim(), chef_de_projet));
+
 		done = false;
 		password = pass;
 		
@@ -379,36 +415,8 @@ public static boolean addReadme(String userName, String pass){
 		
 			@Override
 			public void run() {
-				
-				String command = "";
-				
-				JSch jsch=new JSch();  
-				try {
-					Session session = jsch.getSession(chef_de_projet, Settings.getAdresse_serveur(), 22);
-   
-				    session.setPassword(password);
-				    
-				  //extra config code
-				    java.util.Properties config = new java.util.Properties(); 
-				    config.put("StrictHostKeyChecking", "no");
-				    session.setConfig(config);
-				    
-				    session.connect();
-
-				    command = String.format("python /ftpscript/FTP_alert/main_cli.py  '%s' %d %d", file, Math.round(Settings.getSeuilVert()), Math.round(Settings.getTailleMin()));
-				    
-				    envoiCommande(session, command);
-				    
-				    done = true;
-
-				} catch (JSchException | IOException e) {
-					done = false;
-					System.out.println("\n[ERROR] commande : '" + command + "' echouée\n");
-					e.printStackTrace();
-
-				}
-				    
-				    
+				sortie = "";
+				files.forEach(a -> nouvelle_commande(a, chef_de_projet));	    
 			}
 	    };
 	    
@@ -419,9 +427,7 @@ public static boolean addReadme(String userName, String pass){
 	    return sortie;
 	}
 	
-	public static String envoiCommande(Session session, String command) throws JSchException, IOException{
-		
-		sortie = "";
+	public static String envoiCommande(String command) throws JSchException, IOException{
 		
 		System.out.println("\n[TODO] : '" + command + "'\n");
 		

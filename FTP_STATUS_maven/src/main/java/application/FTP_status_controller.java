@@ -256,6 +256,8 @@ public class FTP_status_controller implements Initializable {
 		
 		if (serveur != null){
 			
+			System.out.println("appel listdir() depuis le controleur");
+			
 			ArrayList<String> anciens = new ArrayList<>();
 
 			String sortie = Caporal.listDir(serveur.getFtpLogin(), Settings.getChefDeProjet(), Settings.getPassChefDeProjet());
