@@ -86,103 +86,6 @@ public class FTP_status_controller implements Initializable {
 	ArrayList<OldFile> oldFiles;
 	ObservableList<OldFile> oldFilesTableau;
 	
-//	public void listDirectory(FTPClient ftpClient, String parentDir,
-//	        String currentDir, int level) throws IOException {
-//	    String dirToList = parentDir;
-//	    if (!currentDir.equals("")) {
-//	        dirToList += "/" + currentDir;
-//	    }
-//	    FTPFile[] subFiles = ftpClient.listFiles(dirToList);
-//	    if (subFiles != null && subFiles.length > 0) {
-//	        for (FTPFile aFile : subFiles) {
-//	            String currentFileName = aFile.getName();
-//	            if (currentFileName.equals(".")
-//	                    || currentFileName.equals("..")) {
-//	                // skip parent directory and directory itself
-//	                continue;
-//	            }
-//	            for (int i = 0; i < level; i++) {
-//	            }
-//	            if (aFile.isDirectory()) {
-//	                listDirectory(ftpClient, dirToList, currentFileName, level + 1);
-//	                System.out.println("\n[INFO] : " + aFile.getName());
-//	                System.out.println("[REPERTOIRE] : " + aFile);
-//	            } else {
-//	            	
-//	            	System.out.print("\nliste complete : ");
-//	            	System.out.println(aFile.getName() + " : " + Duration.between(aFile.getTimestamp().toInstant(), now).toDays() + " jours, " + aFile.getSize()/1024/1024 + " Mo");
-//	            	
-//	            	if(Duration.between(aFile.getTimestamp().toInstant(), now).toDays() > Settings.getSeuilVert()
-//	                   && aFile.getSize()/1024/1024 >= Settings.getTailleMin()){
-//	            		
-//	            		System.out.print("liste filtrée : ");
-//	            		System.out.println(aFile.getName() + " : " + Duration.between(aFile.getTimestamp().toInstant(), now).toDays() + " jours, " + aFile.getSize()/1024/1024 + " Mo");
-//	            		
-//	            		
-//	            		System.out.println(dirToList);
-//	            		System.out.println(currentFileName);
-//	            		//System.out.println(Paths.get(dirToList).resolve(currentFileName));
-//	            		System.out.println(dirToList + File.separator + currentFileName);
-//	            		
-////	            		try {
-//	            		
-//		            		oldFiles.add(
-//		            				new OldFile(
-//		            						Duration.between(aFile.getTimestamp().toInstant(), now).toDays(),
-//		            						//Paths.get(dirToList).resolve(currentFileName).toString(),
-//		            						dirToList + File.separator + currentFileName,
-//		            						aFile.getSize()/1024/1024,
-//		            						false ));
-//		            		        
-//		            		System.out.println("[OK] : " + aFile);
-////	            		}
-////	            		catch (InvalidPathException ipe){
-////	            			System.out.println("[ERREUR] : " + aFile.getName());
-////	            			System.out.println("[ERREUR] : " + aFile);
-////	            		}
-//	            	}
-//	                
-//	            }
-//	        }
-//	    }
-//	}
-//
-//	public FTPClient ftpConnect(){
-//
-//        FTPClient ftpClient = new FTPClient();
-//        ftpClient.setAutodetectUTF8(true);
-//        //ftpClient.setControlEncoding("UTF-8");
-//        ftpClient.setCharset(Charset.forName("UTF-8"));
-//        
-//        try {
-//            ftpClient.connect(ftpAdress, ftpPort);
-//            
-//            System.out.println("Charset_name : " + ftpClient.getCharsetName());
-//            System.out.println("Control_encoding : " + ftpClient.getControlEncoding());
-//            
-//            int replyCode = ftpClient.getReplyCode();
-//            if (!FTPReply.isPositiveCompletion(replyCode)) {
-//                System.out.println("Operation failed. Server reply code: " + replyCode);
-//                return null;
-//            }
-//            boolean success = ftpClient.login(ftpLogin, ftpPass);
-//            if (!success) {
-//                System.out.println("Could not login to the server");
-//                return null;
-//            } else {
-//                System.out.println("LOGGED IN SERVER");
-//                return ftpClient;
-//            }
-//            
-//            
-//            
-//        } catch (IOException ex) {
-//            System.out.println("Oops! Something wrong happened");
-//            ex.printStackTrace();
-//            return null;
-//        }
-//	}
-	
 	public void affichage(){
 		
 		System.out.println(oldFiles.size());
@@ -211,7 +114,7 @@ public class FTP_status_controller implements Initializable {
 	public void onSupprimerButton(){
 		
 		Instant dansUneSemaine = Instant.now().plus(Duration.ofDays(Settings.getSursis()));
-		SimpleDateFormat format1 = new SimpleDateFormat("yyyy_MM_dd");
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 
 		File rep_temp = new File(String.format("/home/ftp_trash/%s", format1.format(Date.from(dansUneSemaine))));
 		

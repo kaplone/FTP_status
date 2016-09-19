@@ -264,15 +264,10 @@ public class Caporal {
 	}
 	
 	public static boolean CreateDir(String dir){
-
-		System.out.println("entered createdir()");
 		
 		Caporal.connect();
-		
-		System.out.println("Caporal.connect()");
 
 		done = false;
-		//password = app.decryptedUserPassword;
 		
 	    Runnable runCreate = new Runnable() {
 		
