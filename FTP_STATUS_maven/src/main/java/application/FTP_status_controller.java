@@ -116,7 +116,7 @@ public class FTP_status_controller implements Initializable {
 		Instant dansUneSemaine = Instant.now().plus(Duration.ofDays(Settings.getSursis()));
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 
-		File rep_temp = new File(String.format("/var/www/vhosts/satellite-multimedia.com/ftp_corbeille/%s", format1.format(Date.from(dansUneSemaine))));
+		File rep_temp = new File(String.format("/var/www/ftp_corbeille/%s", format1.format(Date.from(dansUneSemaine))));
 		
 		System.out.println("création : " + rep_temp.toString());
 		Caporal.CreateDir(rep_temp.toString());
